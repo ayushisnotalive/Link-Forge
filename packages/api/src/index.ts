@@ -5,12 +5,15 @@ import {
   serializerCompiler
 } from 'fastify-type-provider-zod';
 import { env } from './configs/env.js';
+import authRoutes from './routes/router.js';
 
 const app = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
+
+app.register(authRoutes, { prefix: "/api/auth" });
 
 app.get('/health', async () => {
   return { status: 'ok' };
