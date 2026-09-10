@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  shortLinks   ShortLink[]
+
+  @@map("users")
+}
+
+model ShortLink {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String?   @map("user_id") @db.Uuid
+  shortCode  String    @unique @map("short_code") @db.VarChar(12)
+  longUrl    String    @map("long_url")
+  isActive   Boolean   @default(true) @map("is_active")
+  expiresAt  DateTime? @map("expires_at") @db.Timestamptz(6)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user           User?                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clickEvents    ClickEvent[]
+  dailyAggregates ClickAggregateDaily[]
+
+  @@index([shortCode], name: "idx_short_links_short_code")
+  @@index([userId, createdAt(sort: Desc)], name: "idx_short_links_user_created")
+  @@map("short_links")
+}
+
+model ClickEvent {
+  id          BigInt   @id @default(autoincrement())
+  shortLinkId String?  @map("short_link_id") @db.Uuid
+  clickedAt   DateTime @default(now()) @map("clicked_at") @db.Timestamptz(6)
+  ipAddress   String?  @map("ip_address") @db.VarChar(45)
+  userAgent   String?  @map("user_agent")
+  referrer    String?
+  country     String?  @db.VarChar(2)
+  deviceType  String?  @map("device_type") @db.VarChar(20)
+
+  shortLink   ShortLink? @relation(fields: [shortLinkId], references: [id], onDelete: Cascade)
+
+  @@index([shortLinkId, clickedAt(sort: Desc)], name: "idx_click_events_link_time")
+  @@map("click_events")
+}
+
+model ClickAggregateDaily {
+  shortLinkId String   @map("short_link_id") @db.Uuid
+  date        DateTime @db.Date
+  totalClicks Int      @default(0) @map("total_clicks")
+
+  shortLink   ShortLink @relation(fields: [shortLinkId], references: [id], onDelete: Cascade)
+
+  @@id([shortLinkId, date])
+  @@map("click_aggregates_daily")
+}

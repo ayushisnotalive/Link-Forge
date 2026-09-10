@@ -1,10 +1,10 @@
 import fastify from 'fastify';
 import {
   validatorCompiler,
-  serializerCompiler,
-  ZodTypeProvider,
+  type ZodTypeProvider,
+  serializerCompiler
 } from 'fastify-type-provider-zod';
-import { env } from './configs/env'
+import { env } from './configs/env.js';
 
 const app = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 

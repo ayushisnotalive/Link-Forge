@@ -2,12 +2,9 @@
   "name": "api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
+  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
@@ -17,7 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/cookie": "^11.1.2",
-    "@prisma/client": "6",
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2",
     "fastify": "^5.12.3",
@@ -28,7 +26,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.20.2",
-    "prisma": "6",
+    "prisma": "^7.10.0",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   }
