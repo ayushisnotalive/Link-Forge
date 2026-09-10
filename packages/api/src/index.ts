@@ -11,6 +11,7 @@ const app = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
+
 app.get('/health', async () => {
   return { status: 'ok' };
 });
