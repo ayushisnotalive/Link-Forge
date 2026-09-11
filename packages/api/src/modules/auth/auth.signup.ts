@@ -36,7 +36,7 @@ export const signupModule = async(req:FastifyRequest,res:FastifyReply)=>{
     catch(e){
 
         req.log?.error(e);
-        return res.code(500).send({ error: "Something went wrong" });
+        return res.code(500).send({ error: "Something went wrong during signing up" });
 
     }
 }

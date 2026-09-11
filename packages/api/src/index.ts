@@ -1,17 +1,21 @@
 import fastify from 'fastify';
+
 import {
   validatorCompiler,
   type ZodTypeProvider,
   serializerCompiler
 } from 'fastify-type-provider-zod';
 import { env } from './configs/env.js';
-import authRoutes from './routes/router.js';
+import authRoutes from './routes/router.js'
+
+import cookie from '@fastify/cookie';
 
 const app = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
+app.register(cookie);
 
 app.register(authRoutes, { prefix: "/api/auth" });
 

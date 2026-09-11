@@ -9,7 +9,6 @@ import { generateRefreshToken,
     hashToken
  } from "../../services/token.js";
  import cookie from '@fastify/cookie'
-import { error } from "console";
 
 
  export const refreshModule = async(req:FastifyRequest, res:FastifyReply)=>{
@@ -35,12 +34,53 @@ import { error } from "console";
         }
 
         const tokenHash = hashToken(incomingToken);
+
+        // 2. look for this token in DB
         const storedToken = await prisma.refreshToken.findUnique({
             where:{ tokenHash },
+        });
+
+         // 3. Reuse detection: token not found, or already revoked
+
+        if(!storedToken||storedToken.revoked){
+        return res.code(401).send({
+            error:"Refresh token reuse detected. Please log in again."  // Someone is presenting a token we already rotated away from or one that never existed ,treat as compromise.
+
+        })
+        }
+
+        if(storedToken.expiresAt<new Date()){
+        return res.code(401).send({error:"token is expired"})
+        }
+
+        // 4. Valid — rotate: revoke old, issue new pair
+
+        await prisma.refreshToken.update({
+        where:{id:storedToken.id},
+        data:{revoked:true}
         })
 
-    }
-    catch(e){
 
-    }
- }
+        const user = await prisma.user.findUnique({where:{id:payload.userId}})
+        if (!user) {
+        return res.code(401).send({ error: "User no longer exists" });
+        }
+
+        const newAccessToken = generateAccessToken({userId:user.id, email:user.email});
+        const newRefreshToken = generateRefreshToken({userId:user.id, email:user.email})
+
+        await storeRefreshToken(user.id, newRefreshToken)
+
+        res.setCookie('refreshToken', newRefreshToken,{
+             httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+            path: "/api/auth/refresh",
+                })
+
+        return res.code(200).send({ accessToken: newAccessToken });
+  } catch (e) {
+    req.log?.error(e);
+    return res.code(500).send({ error: "Something went terribly wrong" });
+  }
+};
