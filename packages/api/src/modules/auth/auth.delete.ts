@@ -11,7 +11,8 @@ export const deleteModule = async (req:FastifyRequest, res:FastifyReply)=>{
         }
 
         await prisma.user.delete({where:{id:userId}});
-
+        res.clearCookie("accessToken", { path: "/" });
+        res.clearCookie("refreshToken", { path: "/api/auth/refresh" });
         return res.code(204).send()
         }
         catch(e){

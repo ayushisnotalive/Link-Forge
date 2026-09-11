@@ -8,6 +8,7 @@ import { refreshModule } from "../modules/auth/auth.refresh.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { getMeModule } from "../modules/auth/auth.getMe.js";
 import { deleteModule } from "../modules/auth/auth.delete.js";
+import { logoutModule } from "../modules/auth/auth.logout.js";
 
 
 
@@ -15,6 +16,7 @@ import { deleteModule } from "../modules/auth/auth.delete.js";
 export default async function authRoutes(app: FastifyInstance) {
   app.post("/signup", signupModule);
   app.post("/login",loginModule);
+  app.post("/logout", {preHandler:requireAuth},logoutModule);
   app.post("/refresh", refreshModule);
   app.get("/me", {preHandler:requireAuth},getMeModule);
   app.delete("/delete",{preHandler:requireAuth},deleteModule);

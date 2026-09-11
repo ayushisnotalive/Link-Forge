@@ -6,7 +6,7 @@ export const requireAuth = async(req:FastifyRequest, res:FastifyReply)=>{
     try{
         const authHeader = req.headers.authorization;
 
-        if(!authHeader || !authHeader.startsWith("bearer ")){
+        if(!authHeader || !authHeader.startsWith("Bearer ")){
             return res.code(401).send({error: "no access token provided"})
         }
 

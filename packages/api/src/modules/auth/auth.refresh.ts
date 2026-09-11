@@ -43,6 +43,9 @@ import { generateRefreshToken,
          // 3. Reuse detection: token not found, or already revoked
 
         if(!storedToken||storedToken.revoked){
+            if (storedToken) {
+                await revokeAlluserToken(storedToken.userId); // this will kill all sessions.. hehe...
+            }
         return res.code(401).send({
             error:"Refresh token reuse detected. Please log in again."  // Someone is presenting a token we already rotated away from or one that never existed ,treat as compromise.
 
