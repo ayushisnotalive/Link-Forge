@@ -6,7 +6,8 @@ import {
   serializerCompiler
 } from 'fastify-type-provider-zod';
 import { env } from './configs/env.js';
-import authRoutes from './routes/router.js'
+import authRoutes from './routes/auth.router.js'
+import linksRoutes from './routes/link.router.js';
 
 import cookie from '@fastify/cookie';
 
@@ -18,6 +19,7 @@ app.setSerializerCompiler(serializerCompiler);
 app.register(cookie);
 
 app.register(authRoutes, { prefix: "/api/auth" });
+app.register(linksRoutes,{prefix:"/api/links"})
 
 app.get('/health', async () => {
   return { status: 'ok' };

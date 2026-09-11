@@ -20,7 +20,7 @@
           ▼                         ▼
 ┌─────────────────────┐   ┌─────────────────────┐
 │   Node.js API       │   │   Redirect Service   │
-│   (Express/Fastify) │   │   (Node.js/Express)  │
+│    (Fastify)        │   │   (Node.js/Express)  │
 │                     │   │                      │
 │  - Auth (JWT)       │   │  - Lookup short code │
 │  - CRUD links       │   │  - Serve 302         │
