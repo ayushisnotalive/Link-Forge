@@ -8,6 +8,7 @@ import {
 import { env } from './configs/env.js';
 import authRoutes from './routes/auth.router.js'
 import linksRoutes from './routes/link.router.js';
+import redirectRoutes from './routes/redirect.routes.js';
 
 import cookie from '@fastify/cookie';
 
@@ -20,6 +21,7 @@ app.register(cookie);
 
 app.register(authRoutes, { prefix: "/api/auth" });
 app.register(linksRoutes,{prefix:"/api/links"})
+app.register(redirectRoutes)
 
 app.get('/health', async () => {
   return { status: 'ok' };
