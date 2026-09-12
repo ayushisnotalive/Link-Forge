@@ -8,21 +8,27 @@ export default function Dashboard() {
   const { logout } = useAuth();
 
   return (
-    <div className="mx-auto max-w-2xl p-8">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Your links</h1>
-        <button onClick={logout} className="text-sm text-gray-500 underline">
+    <div className="mx-auto max-w-xl px-6 py-12">
+      <div className="mb-8 flex items-baseline justify-between">
+        <h1 className="text-lg font-semibold">Your links</h1>
+        <button onClick={() => logout()} className="text-sm text-ink/50 hover:text-ink">
           Log out
         </button>
       </div>
+
       <CreateLinkForm />
-      {isLoading && <p className="text-gray-500">Loading...</p>}
-      {error && <p className="text-red-600">Failed to load links</p>}
-      {links && links.length === 0 && <p className="text-gray-500">No links yet — create one above.</p>}
-      <div className="space-y-3">
-        {links?.map((link) => (
-          <LinkCard key={link.id} link={link} />
-        ))}
+
+      <div className="mt-10">
+        {isLoading && <p className="text-sm text-ink/50">Loading your links…</p>}
+        {error && <p className="text-sm text-rust">Couldn't load your links. Try refreshing.</p>}
+        {links && links.length === 0 && (
+          <p className="text-sm text-ink/50">Nothing here yet. Forge your first link above.</p>
+        )}
+        <div className="divide-y divide-line border-t border-line">
+          {links?.map((link) => (
+            <LinkCard key={link.id} link={link} />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -36,8 +36,8 @@ export const loginModule =async(req:FastifyRequest, res:FastifyReply)=>{
             })
         }
 
-        const refreshToken = generateRefreshToken({userId: user.id, email:user.email });
-        const accessToken = generateAccessToken({userId:user.id, email:user.email});
+        let refreshToken = generateRefreshToken({userId: user.id, email:user.email });
+        let accessToken = generateAccessToken({userId:user.id, email:user.email});
 
         await storeRefreshToken(user.id,refreshToken);
 

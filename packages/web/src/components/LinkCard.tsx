@@ -13,28 +13,40 @@ export default function LinkCard({ link }: { link: ShortLink }) {
     : null;
 
   return (
-    <div className="flex items-center justify-between rounded border p-4">
+    <div
+      className="flex items-center justify-between gap-4 py-4"
+      style={{ animation: "rowIn 0.25s ease-out" }}
+    >
       <div className="min-w-0">
-        <a href={shortUrl} target="_blank" rel="noreferrer" className="block truncate font-medium text-blue-600">
-          {shortUrl}
+        <a
+        
+          href={shortUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="block truncate font-mono text-sm text-accent hover:underline"
+        >
+          {link.shortCode}
         </a>
-        <p className="truncate text-sm text-gray-500">{link.longUrl}</p>
-        {daysLeft !== null && (
-          <p className="text-xs text-gray-400">expires in {daysLeft} day{daysLeft === 1 ? "" : "s"}</p>
-        )}
+        <p className="truncate text-sm text-ink/50">{link.longUrl}</p>
+        <div className="mt-1 flex items-center gap-2 text-xs text-ink/40">
+          <span className={link.isActive ? "text-accent" : "text-ink/40"}>
+            {link.isActive ? "active" : "disabled"}
+          </span>
+          {daysLeft !== null && <span>· expires in {daysLeft}d</span>}
+        </div>
       </div>
-      <div className="flex shrink-0 items-center gap-2">
+      <div className="flex shrink-0 items-center gap-4 text-sm">
         <button
           onClick={() => toggleLink.mutate({ id: link.id, isActive: !link.isActive })}
-          className="rounded border px-3 py-1 text-sm"
+          className="text-ink/60 hover:text-ink"
         >
-          {link.isActive ? "Disable" : "Enable"}
+          {link.isActive ? "disable" : "enable"}
         </button>
         <button
           onClick={() => deleteLink.mutate(link.id)}
-          className="rounded border border-red-300 px-3 py-1 text-sm text-red-600"
+          className="text-rust/80 hover:text-rust"
         >
-          Delete
+          delete
         </button>
       </div>
     </div>

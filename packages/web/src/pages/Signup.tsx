@@ -28,35 +28,37 @@ export default function Signup() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4 rounded-lg bg-white p-8 shadow">
-        <h1 className="text-xl font-semibold">Sign up</h1>
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full rounded border px-3 py-2"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="w-full rounded border px-3 py-2"
-        />
+    <div className="flex min-h-screen items-center justify-center px-6">
+      <form onSubmit={handleSubmit} className="w-full max-w-sm">
+        <h1 className="mb-6 text-lg font-semibold">Sign up</h1>
+        {error && <p className="mb-4 text-sm text-rust">{error}</p>}
+        <div className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full border-b border-line bg-transparent py-2 text-sm outline-none focus:border-ink"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="w-full border-b border-line bg-transparent py-2 text-sm outline-none focus:border-ink"
+          />
+        </div>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded bg-black py-2 text-white disabled:opacity-50"
+          className="mt-6 w-full bg-ink py-2 text-sm text-paper disabled:opacity-40"
         >
-          {isSubmitting ? "Creating account..." : "Sign up"}
+          {isSubmitting ? "Creating account…" : "Sign up"}
         </button>
-        <p className="text-sm text-gray-500">
-          Already have an account? <Link to="/login" className="underline">Log in</Link>
+        <p className="mt-4 text-sm text-ink/50">
+          Already have an account? <Link to="/login" className="text-accent">Log in</Link>
         </p>
       </form>
     </div>

@@ -16,23 +16,26 @@ export default function CreateLinkForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6 flex gap-2">
-      <input
-        type="url"
-        placeholder="https://example.com/your-long-url"
-        value={longUrl}
-        onChange={(e) => setLongUrl(e.target.value)}
-        required
-        className="flex-1 rounded border px-3 py-2"
-      />
-      <button
-        type="submit"
-        disabled={isPending}
-        className="rounded bg-black px-4 py-2 text-white disabled:opacity-50"
-      >
-        {isPending ? "Creating..." : "Shorten"}
-      </button>
-      {error && <p className="self-center text-sm text-red-600">{error}</p>}
+    <form onSubmit={handleSubmit}>
+      <div className="flex items-center gap-3 border-b border-ink pb-3">
+        <span className="font-mono text-sm text-ink/40">forge&gt;</span>
+        <input
+          type="url"
+          placeholder="paste a long url"
+          value={longUrl}
+          onChange={(e) => setLongUrl(e.target.value)}
+          required
+          className="flex-1 bg-transparent font-mono text-sm outline-none placeholder:text-ink/30"
+        />
+        <button
+          type="submit"
+          disabled={isPending}
+          className="text-sm font-medium text-accent hover:text-ink disabled:opacity-40"
+        >
+          {isPending ? "forging…" : "shorten"}
+        </button>
+      </div>
+      {error && <p className="mt-2 text-sm text-rust">{error}</p>}
     </form>
   );
 }

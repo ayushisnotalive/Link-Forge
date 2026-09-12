@@ -13,7 +13,7 @@ import { generateRefreshToken,
 
  export const refreshModule = async(req:FastifyRequest, res:FastifyReply)=>{
     try{
-        const incomingToken = req.cookies?.refreshToken;
+        let incomingToken = req.cookies?.refreshToken;
 
         if(!incomingToken){
            return res.code(401).send(
@@ -33,10 +33,10 @@ import { generateRefreshToken,
              return res.code(401).send({ error: "Invalid or expired refresh token" });
         }
 
-        const tokenHash = hashToken(incomingToken);
+        let tokenHash = hashToken(incomingToken);
 
         // 2. look for this token in DB
-        const storedToken = await prisma.refreshToken.findUnique({
+        let storedToken = await prisma.refreshToken.findUnique({
             where:{ tokenHash },
         });
 
