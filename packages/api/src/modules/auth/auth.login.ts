@@ -5,7 +5,6 @@ import { LoginSChema } from "../../services/validator.js";
 import { generateRefreshToken } from "../../services/token.js";
 import { generateAccessToken } from "../../services/token.js";
 import { storeRefreshToken } from "../../services/token.js";
-import cookie from '@fastify/cookie'
 
 
 export const loginModule =async(req:FastifyRequest, res:FastifyReply)=>{
