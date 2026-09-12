@@ -11,7 +11,7 @@ export const createLinkModule = async(req:FastifyRequest, res:FastifyReply) =>{
         const parsed = createLinkSchema.safeParse(req.body);
 
         if(!parsed.success){
-            return res.code(401).send({
+            return res.code(400).send({
                 error:"invalid request body",
                 details:parsed.error.flatten().fieldErrors,
             });

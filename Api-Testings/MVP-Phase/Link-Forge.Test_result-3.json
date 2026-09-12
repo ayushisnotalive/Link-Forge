@@ -1,0 +1,682 @@
+{
+	"id": "a02814b8-5ff0-49da-8caa-d96826097ed1",
+	"name": "Link-Forge",
+	"timestamp": "2026-09-12T08:10:39.149Z",
+	"collection_id": "55264219-5b4ab00a-6128-4893-a362-1cc570ef4fc4",
+	"folder_id": 0,
+	"environment_id": "55264219-4facc06d-50a7-42ad-b491-bc7391bd331f",
+	"totalPass": 24,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2026-09-12T08:10:24.741Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "fbb3b20b-6174-4809-a493-81085867e101",
+			"name": "Signup - User A",
+			"url": "http://localhost:3000/api/auth/signup",
+			"time": 5303,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				5303
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "d3071ec6-41d9-4b3f-b9a9-9e4c9b8b106e",
+			"name": "Signup - User B (for ownership tests)",
+			"url": "http://localhost:3000/api/auth/signup",
+			"time": 799,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				799
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "71d54f31-f07b-4d44-8047-242954c60d9a",
+			"name": "Login - User A",
+			"url": "http://localhost:3000/api/auth/login",
+			"time": 816,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"login A succeeded": true
+			},
+			"testPassFailCounts": {
+				"login A succeeded": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				816
+			],
+			"allTests": [
+				{
+					"login A succeeded": true
+				}
+			]
+		},
+		{
+			"id": "2c61a713-60eb-42d8-be88-260c812119cc",
+			"name": "Login - User B",
+			"url": "http://localhost:3000/api/auth/login",
+			"time": 760,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"login B succeeded": true
+			},
+			"testPassFailCounts": {
+				"login B succeeded": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				760
+			],
+			"allTests": [
+				{
+					"login B succeeded": true
+				}
+			]
+		},
+		{
+			"id": "41ab4a3f-f717-4796-89ba-48904a60d435",
+			"name": "Create link - happy path",
+			"url": "http://localhost:3000/api/links",
+			"time": 305,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"status is 201": true,
+				"no userId leaked": true
+			},
+			"testPassFailCounts": {
+				"status is 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"no userId leaked": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				305
+			],
+			"allTests": [
+				{
+					"status is 201": true,
+					"no userId leaked": true
+				}
+			]
+		},
+		{
+			"id": "161d3488-2ab4-486a-ae41-d2fbbde1ba8a",
+			"name": "Create link - no auth (expect 401)",
+			"url": "http://localhost:3000/api/links",
+			"time": 4,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"status is 401": true
+			},
+			"testPassFailCounts": {
+				"status is 401": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"status is 401": true
+				}
+			]
+		},
+		{
+			"id": "5ff35222-a541-4159-9ff0-8d6e9be809bf",
+			"name": "Create link - invalid protocol (expect 400)",
+			"url": "http://localhost:3000/api/links",
+			"time": 4,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"status is 400": true
+			},
+			"testPassFailCounts": {
+				"status is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"status is 400": true
+				}
+			]
+		},
+		{
+			"id": "306ab934-65c7-4a14-9a27-aa194d13321d",
+			"name": "Create link - empty long_url (expect 400)",
+			"url": "http://localhost:3000/api/links",
+			"time": 4,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"status is 400": true
+			},
+			"testPassFailCounts": {
+				"status is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"status is 400": true
+				}
+			]
+		},
+		{
+			"id": "da3fcfeb-08b8-45a1-8452-3770b05457b4",
+			"name": "Create link - over 2048 chars (expect 400)",
+			"url": "http://localhost:3000/api/links",
+			"time": 4,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"status is 400": true
+			},
+			"testPassFailCounts": {
+				"status is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"status is 400": true
+				}
+			]
+		},
+		{
+			"id": "3288c34a-f1f1-4ad7-bf85-36db003b9879",
+			"name": "Redirect - valid + active (expect 302)",
+			"url": "http://localhost:3000/8lMfHPx",
+			"time": 314,
+			"responseCode": {
+				"code": 302,
+				"name": "Found"
+			},
+			"tests": {
+				"status is 302": true,
+				"has Location header": true
+			},
+			"testPassFailCounts": {
+				"status is 302": {
+					"pass": 1,
+					"fail": 0
+				},
+				"has Location header": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				314
+			],
+			"allTests": [
+				{
+					"status is 302": true,
+					"has Location header": true
+				}
+			]
+		},
+		{
+			"id": "674346e4-c930-4ea9-9443-4da12d6bc5ab",
+			"name": "Redirect - unknown code (expect 404)",
+			"url": "http://localhost:3000/doesnotexist123",
+			"time": 319,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"status is 404": true
+			},
+			"testPassFailCounts": {
+				"status is 404": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				319
+			],
+			"allTests": [
+				{
+					"status is 404": true
+				}
+			]
+		},
+		{
+			"id": "a8e0ffb5-a3c3-4330-b8e1-f3c1a5cc0a79",
+			"name": "List - User A (should include the created link)",
+			"url": "http://localhost:3000/api/links",
+			"time": 429,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"status is 200": true,
+				"is array": true,
+				"contains created link": true
+			},
+			"testPassFailCounts": {
+				"status is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"is array": {
+					"pass": 1,
+					"fail": 0
+				},
+				"contains created link": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				429
+			],
+			"allTests": [
+				{
+					"status is 200": true,
+					"is array": true,
+					"contains created link": true
+				}
+			]
+		},
+		{
+			"id": "ab873a3a-d1d3-435c-b87c-e244f9ac77e4",
+			"name": "List - User B (should be empty, no cross-user leak)",
+			"url": "http://localhost:3000/api/links",
+			"time": 317,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"status is 200": true,
+				"does not contain A's link": true
+			},
+			"testPassFailCounts": {
+				"status is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"does not contain A's link": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				317
+			],
+			"allTests": [
+				{
+					"status is 200": true,
+					"does not contain A's link": true
+				}
+			]
+		},
+		{
+			"id": "173e9a7c-9020-4d66-8588-29b699ff4b35",
+			"name": "List - no auth (expect 401)",
+			"url": "http://localhost:3000/api/links",
+			"time": 3,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"status is 401": true
+			},
+			"testPassFailCounts": {
+				"status is 401": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				3
+			],
+			"allTests": [
+				{
+					"status is 401": true
+				}
+			]
+		},
+		{
+			"id": "c4909566-19b8-40e8-9d98-7605ebbda1c6",
+			"name": "Patch - User B tries A's link (expect 404)",
+			"url": "http://localhost:3000/api/links/b7a1f208-9a5e-4a75-88f5-c3c39d3191f5",
+			"time": 339,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"status is 404": true
+			},
+			"testPassFailCounts": {
+				"status is 404": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				339
+			],
+			"allTests": [
+				{
+					"status is 404": true
+				}
+			]
+		},
+		{
+			"id": "f2b2e5b1-2854-4035-a58b-35375e5de554",
+			"name": "Patch - User A toggles is_active (expect 200)",
+			"url": "http://localhost:3000/api/links/b7a1f208-9a5e-4a75-88f5-c3c39d3191f5",
+			"time": 698,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"status is 200": true,
+				"is_active is now false": true
+			},
+			"testPassFailCounts": {
+				"status is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"is_active is now false": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				698
+			],
+			"allTests": [
+				{
+					"status is 200": true,
+					"is_active is now false": true
+				}
+			]
+		},
+		{
+			"id": "74de62c0-853e-4f1e-9cd3-2d10e3c3963b",
+			"name": "Redirect after disabling (expect 404)",
+			"url": "http://localhost:3000/8lMfHPx",
+			"time": 393,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"status is 404": true
+			},
+			"testPassFailCounts": {
+				"status is 404": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				393
+			],
+			"allTests": [
+				{
+					"status is 404": true
+				}
+			]
+		},
+		{
+			"id": "85f0af22-3501-45a4-9ed9-43c67cdf333f",
+			"name": "Patch - User A re-enables link (expect 200)",
+			"url": "http://localhost:3000/api/links/b7a1f208-9a5e-4a75-88f5-c3c39d3191f5",
+			"time": 1211,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				1211
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "6f5c96bb-d9f3-4311-a074-e778db1fc373",
+			"name": "Delete - User B tries A's link (expect 404)",
+			"url": "http://localhost:3000/api/links/b7a1f208-9a5e-4a75-88f5-c3c39d3191f5",
+			"time": 311,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"status is 404": true
+			},
+			"testPassFailCounts": {
+				"status is 404": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				311
+			],
+			"allTests": [
+				{
+					"status is 404": true
+				}
+			]
+		},
+		{
+			"id": "ac24790b-a9b6-4df1-8f9d-1c859070b5fe",
+			"name": "Delete - User A deletes own link (expect 204)",
+			"url": "http://localhost:3000/api/links/b7a1f208-9a5e-4a75-88f5-c3c39d3191f5",
+			"time": 788,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"status is 204": true
+			},
+			"testPassFailCounts": {
+				"status is 204": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				788
+			],
+			"allTests": [
+				{
+					"status is 204": true
+				}
+			]
+		},
+		{
+			"id": "25580f48-514d-4168-839a-4e6c119120fd",
+			"name": "Redirect after delete (expect 404, confirms row is gone)",
+			"url": "http://localhost:3000/8lMfHPx",
+			"time": 393,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"status is 404": true
+			},
+			"testPassFailCounts": {
+				"status is 404": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				393
+			],
+			"allTests": [
+				{
+					"status is 404": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 13514,
+	"collection": {
+		"requests": [
+			{
+				"id": "fbb3b20b-6174-4809-a493-81085867e101",
+				"method": "POST"
+			},
+			{
+				"id": "d3071ec6-41d9-4b3f-b9a9-9e4c9b8b106e",
+				"method": "POST"
+			},
+			{
+				"id": "71d54f31-f07b-4d44-8047-242954c60d9a",
+				"method": "POST"
+			},
+			{
+				"id": "2c61a713-60eb-42d8-be88-260c812119cc",
+				"method": "POST"
+			},
+			{
+				"id": "41ab4a3f-f717-4796-89ba-48904a60d435",
+				"method": "POST"
+			},
+			{
+				"id": "161d3488-2ab4-486a-ae41-d2fbbde1ba8a",
+				"method": "POST"
+			},
+			{
+				"id": "5ff35222-a541-4159-9ff0-8d6e9be809bf",
+				"method": "POST"
+			},
+			{
+				"id": "306ab934-65c7-4a14-9a27-aa194d13321d",
+				"method": "POST"
+			},
+			{
+				"id": "da3fcfeb-08b8-45a1-8452-3770b05457b4",
+				"method": "POST"
+			},
+			{
+				"id": "3288c34a-f1f1-4ad7-bf85-36db003b9879",
+				"method": "GET"
+			},
+			{
+				"id": "674346e4-c930-4ea9-9443-4da12d6bc5ab",
+				"method": "GET"
+			},
+			{
+				"id": "a8e0ffb5-a3c3-4330-b8e1-f3c1a5cc0a79",
+				"method": "GET"
+			},
+			{
+				"id": "ab873a3a-d1d3-435c-b87c-e244f9ac77e4",
+				"method": "GET"
+			},
+			{
+				"id": "173e9a7c-9020-4d66-8588-29b699ff4b35",
+				"method": "GET"
+			},
+			{
+				"id": "c4909566-19b8-40e8-9d98-7605ebbda1c6",
+				"method": "PATCH"
+			},
+			{
+				"id": "f2b2e5b1-2854-4035-a58b-35375e5de554",
+				"method": "PATCH"
+			},
+			{
+				"id": "74de62c0-853e-4f1e-9cd3-2d10e3c3963b",
+				"method": "GET"
+			},
+			{
+				"id": "85f0af22-3501-45a4-9ed9-43c67cdf333f",
+				"method": "PATCH"
+			},
+			{
+				"id": "6f5c96bb-d9f3-4311-a074-e778db1fc373",
+				"method": "DELETE"
+			},
+			{
+				"id": "ac24790b-a9b6-4df1-8f9d-1c859070b5fe",
+				"method": "DELETE"
+			},
+			{
+				"id": "25580f48-514d-4168-839a-4e6c119120fd",
+				"method": "GET"
+			}
+		]
+	}
+}

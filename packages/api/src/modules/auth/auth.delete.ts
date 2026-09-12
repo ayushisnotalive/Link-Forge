@@ -1,6 +1,6 @@
 import type { FastifyRequest,FastifyReply } from "fastify";
 import { prisma } from "../../services/prisma.js";
-import { error } from "console";
+
 
 export const deleteModule = async (req:FastifyRequest, res:FastifyReply)=>{
     try{

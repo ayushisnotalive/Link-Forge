@@ -1,0 +1,321 @@
+{
+  "info": {
+    "name": "Link-Forge",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "accessTokenA", "value": "" },
+    { "key": "accessTokenB", "value": "" },
+    { "key": "linkId", "value": "" },
+    { "key": "shortCode", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Signup - User A",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"user-a@test.com\",\n  \"password\": \"password123\"\n}" },
+            "url": "{{baseUrl}}/api/auth/signup"
+          }
+        },
+        {
+          "name": "Signup - User B (for ownership tests)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"user-b@test.com\",\n  \"password\": \"password123\"\n}" },
+            "url": "{{baseUrl}}/api/auth/signup"
+          }
+        },
+        {
+          "name": "Login - User A",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "const data = pm.response.json();",
+                "pm.collectionVariables.set('accessTokenA', data.accessToken);",
+                "pm.test('login A succeeded', () => pm.response.to.have.status(200));"
+              ]
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"user-a@test.com\",\n  \"password\": \"password123\"\n}" },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login - User B",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "const data = pm.response.json();",
+                "pm.collectionVariables.set('accessTokenB', data.accessToken);",
+                "pm.test('login B succeeded', () => pm.response.to.have.status(200));"
+              ]
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"user-b@test.com\",\n  \"password\": \"password123\"\n}" },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Me (sanity check on token)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessTokenA}}" }],
+            "url": "{{baseUrl}}/api/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Links - Create",
+      "item": [
+        {
+          "name": "Create link - happy path",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test('status is 201', () => pm.response.to.have.status(201));",
+                "const data = pm.response.json();",
+                "pm.collectionVariables.set('linkId', data.id);",
+                "pm.collectionVariables.set('shortCode', data.shortCode);",
+                "pm.test('no userId leaked', () => pm.expect(data.userId).to.be.undefined);"
+              ]
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessTokenA}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"long_url\": \"https://example.com/some/page\"\n}" },
+            "url": "{{baseUrl}}/api/links"
+          }
+        },
+        {
+          "name": "Create link - no auth (expect 401)",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('status is 401', () => pm.response.to.have.status(401));"] } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"long_url\": \"https://example.com\"\n}" },
+            "url": "{{baseUrl}}/api/links"
+          }
+        },
+        {
+          "name": "Create link - invalid protocol (expect 400)",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('status is 400', () => pm.response.to.have.status(400));"] } }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessTokenA}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"long_url\": \"ftp://example.com\"\n}" },
+            "url": "{{baseUrl}}/api/links"
+          }
+        },
+        {
+          "name": "Create link - empty long_url (expect 400)",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('status is 400', () => pm.response.to.have.status(400));"] } }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessTokenA}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"long_url\": \"\"\n}" },
+            "url": "{{baseUrl}}/api/links"
+          }
+        },
+        {
+          "name": "Create link - over 2048 chars (expect 400)",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('status is 400', () => pm.response.to.have.status(400));"] } }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessTokenA}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"long_url\": \"https://example.com/{{$randomLoremParagraphs}}-{{$randomLoremParagraphs}}-{{$randomLoremParagraphs}}-{{$randomLoremParagraphs}}-{{$randomLoremParagraphs}}\"\n}" },
+            "url": "{{baseUrl}}/api/links"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Links - Redirect",
+      "item": [
+        {
+          "name": "Redirect - valid + active (expect 302)",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test('status is 302', () => pm.response.to.have.status(302));",
+                "pm.test('has Location header', () => pm.expect(pm.response.headers.get('Location')).to.include('example.com'));"
+              ]
+            }
+          }],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/{{shortCode}}"
+          }
+        },
+        {
+          "name": "Redirect - unknown code (expect 404)",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('status is 404', () => pm.response.to.have.status(404));"] } }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/doesnotexist123" }
+        }
+      ]
+    },
+    {
+      "name": "Links - List",
+      "item": [
+        {
+          "name": "List - User A (should include the created link)",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                "const data = pm.response.json();",
+                "pm.test('is array', () => pm.expect(Array.isArray(data)).to.be.true);",
+                "pm.test('contains created link', () => pm.expect(data.some(l => l.id === pm.collectionVariables.get('linkId'))).to.be.true);"
+              ]
+            }
+          }],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessTokenA}}" }],
+            "url": "{{baseUrl}}/api/links"
+          }
+        },
+        {
+          "name": "List - User B (should be empty, no cross-user leak)",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                "const data = pm.response.json();",
+                "pm.test('does not contain A\\'s link', () => pm.expect(data.some(l => l.id === pm.collectionVariables.get('linkId'))).to.be.false);"
+              ]
+            }
+          }],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessTokenB}}" }],
+            "url": "{{baseUrl}}/api/links"
+          }
+        },
+        {
+          "name": "List - no auth (expect 401)",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('status is 401', () => pm.response.to.have.status(401));"] } }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/links" }
+        }
+      ]
+    },
+    {
+      "name": "Links - Patch",
+      "item": [
+        {
+          "name": "Patch - User B tries A's link (expect 404)",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('status is 404', () => pm.response.to.have.status(404));"] } }],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessTokenB}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"is_active\": false\n}" },
+            "url": "{{baseUrl}}/api/links/{{linkId}}"
+          }
+        },
+        {
+          "name": "Patch - User A toggles is_active (expect 200)",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                "const data = pm.response.json();",
+                "pm.test('is_active is now false', () => pm.expect(data.isActive).to.eql(false));"
+              ]
+            }
+          }],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessTokenA}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"is_active\": false\n}" },
+            "url": "{{baseUrl}}/api/links/{{linkId}}"
+          }
+        },
+        {
+          "name": "Redirect after disabling (expect 404)",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('status is 404', () => pm.response.to.have.status(404));"] } }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/{{shortCode}}" }
+        },
+        {
+          "name": "Patch - User A re-enables link (expect 200)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessTokenA}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"is_active\": true\n}" },
+            "url": "{{baseUrl}}/api/links/{{linkId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Links - Delete",
+      "item": [
+        {
+          "name": "Delete - User B tries A's link (expect 404)",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('status is 404', () => pm.response.to.have.status(404));"] } }],
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessTokenB}}" }],
+            "url": "{{baseUrl}}/api/links/{{linkId}}"
+          }
+        },
+        {
+          "name": "Delete - User A deletes own link (expect 204)",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('status is 204', () => pm.response.to.have.status(204));"] } }],
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessTokenA}}" }],
+            "url": "{{baseUrl}}/api/links/{{linkId}}"
+          }
+        },
+        {
+          "name": "Redirect after delete (expect 404, confirms row is gone)",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('status is 404', () => pm.response.to.have.status(404));"] } }],
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/{{shortCode}}" }
+        }
+      ]
+    }
+  ]
+}
