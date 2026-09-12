@@ -1,5 +1,6 @@
 import type { FastifyRequest,FastifyReply } from "fastify";
 import { prisma } from "../../services/prisma.js";
+import { redis } from "../../services/redis.js";
 
 export const deleteLinkModule = async (
         req: FastifyRequest<{ Params: { id: string } }>,
@@ -11,7 +12,7 @@ export const deleteLinkModule = async (
 
             const isExisting = await prisma.shortLink.findUnique({
                 where:{id},
-                select:{userId:true}
+                select:{userId:true, shortCode:true}
             });
 
             if (!isExisting || isExisting.userId !== userId) {
@@ -21,6 +22,8 @@ export const deleteLinkModule = async (
             await prisma.shortLink.delete({
                 where:{id}
             });
+
+            await redis.del(`redirect:${isExisting.shortCode}`);
 
             return res.code(204).send()
 

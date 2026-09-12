@@ -5,5 +5,6 @@ export default async function redirectRoutes(app: FastifyInstance) {
   app.get<{ 
     Params: { code: string }}>(
     "/:code",
+    {config: { rateLimit: { max: 100, timeWindow: "1 minute" } },},
     redirectModule);
 }

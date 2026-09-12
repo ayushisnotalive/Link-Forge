@@ -1,6 +1,7 @@
 import type { FastifyRequest,FastifyReply } from "fastify";
 import { updateLinkSchema } from "./links.schema.js";
 import { prisma } from "../../services/prisma.js";
+import { redis } from "../../services/redis.js";
 
 
 export const updateLinksModule = async(req:FastifyRequest<{
@@ -21,7 +22,7 @@ export const updateLinksModule = async(req:FastifyRequest<{
 
         const isExisting = await prisma.shortLink.findUnique({
             where:{id},
-            select:{userId:true}
+            select:{userId:true, shortCode:true}
         })
 
         if(!isExisting || isExisting.userId !== userId){
@@ -45,6 +46,8 @@ export const updateLinksModule = async(req:FastifyRequest<{
                 createdAt:true
             }
         });
+
+        await redis.del(`redirect:${isExisting.shortCode}`);
 
         return res.code(200).send(updated);
 

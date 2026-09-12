@@ -18,7 +18,9 @@ export const createLinkModule = async(req:FastifyRequest, res:FastifyReply) =>{
         }
 
         const {long_url} = parsed.data;
-        const userId = req.user!.userId
+        const userId = req.user!.userId;
+        const expiresAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+
 
         let attempt = 0;
 
@@ -29,7 +31,8 @@ export const createLinkModule = async(req:FastifyRequest, res:FastifyReply) =>{
                     data:{
                         userId,
                         longUrl : long_url,
-                        shortCode
+                        shortCode,
+                        expiresAt
                     },
                     select:{
                         id:true,
