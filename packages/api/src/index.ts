@@ -1,10 +1,4 @@
 import fastify from 'fastify';
-
-import {
-  validatorCompiler,
-  type ZodTypeProvider,
-  serializerCompiler
-} from 'fastify-type-provider-zod';
 import { env } from './configs/env.js';
 import authRoutes from './routes/auth.router.js';
 import linksRoutes from './routes/link.router.js';
@@ -16,21 +10,15 @@ import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 import { redis } from './services/redis.js';
 
-
-
 const app = fastify({
   logger: true,
-  trustProxy: true, // required so req.ip resolves correctly behind a platform's proxy/load balancer
-}).withTypeProvider<ZodTypeProvider>();
-
-app.setValidatorCompiler(validatorCompiler);
-app.setSerializerCompiler(serializerCompiler);
+  trustProxy: true,
+});
 
 // --- Security & infra middleware ---
 
 app.register(helmet, {
-  // Fastify's helmet defaults are sane; only override if you serve HTML/embed content
-  crossOriginResourcePolicy: { policy: 'cross-origin' }, // needed if frontend is on a different origin
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
 });
 
 app.register(cors, {
@@ -41,7 +29,7 @@ app.register(cors, {
 app.register(cookie);
 
 app.register(rateLimit, {
-  global: false, // set per-route limits instead of one blanket rule
+  global: false,
   redis: redis,
   errorResponseBuilder: (req, context) => ({
     error: 'Too many requests',
@@ -61,7 +49,7 @@ app.get('/health', async () => {
 
 const startServer = async () => {
   try {
-    await app.listen({ port: env.PORT, host: '0.0.0.0' }); // host 0.0.0.0 needed for most deploy platforms
+    await app.listen({ port: env.PORT, host: '0.0.0.0' });
   } catch (e) {
     app.log.error(e);
     process.exit(1);
