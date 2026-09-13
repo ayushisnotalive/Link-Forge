@@ -1,5 +1,6 @@
-const API_URL = import.meta.env.VITE_API_URL;
 import { getAccessToken } from "../context/tokenStore";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 export async function refreshAccessToken(): Promise<string | null> {
   const res = await fetch(`${API_URL}/api/auth/refresh`, {
@@ -42,7 +43,7 @@ export async function login(email: string, password: string): Promise<string> {
 
 export async function logoutRequest(): Promise<void> {
   const token = getAccessToken();
-  await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+  await fetch(`${API_URL}/api/auth/logout`, {
     method: "POST",
     credentials: "include",
     headers: token ? { Authorization: `Bearer ${token}` } : {},

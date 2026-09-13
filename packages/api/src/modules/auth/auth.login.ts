@@ -50,11 +50,11 @@ export const loginModule =async(req:FastifyRequest, res:FastifyReply)=>{
         });
 
 
-        return res.code(200).send({
-            success: true,
-            message: 'Login successful',
-            accessToken,
-            user: { id: user.id, email: user.email },
+        res.setCookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            path: "/api/auth",
         });
 
     }catch(e){

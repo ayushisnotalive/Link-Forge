@@ -34,9 +34,8 @@ app.register(helmet, {
 });
 
 app.register(cors, {
-  origin: env.FRONTEND_URL, // e.g. "https://yourapp.vercel.app" — never use "*" when credentials: true
-  credentials: true, // required for cookies to be sent cross-origin
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  origin: "https://web-five-dusky-19.vercel.app",
+  credentials: true,
 });
 
 app.register(cookie);

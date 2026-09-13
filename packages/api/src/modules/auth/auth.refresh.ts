@@ -78,7 +78,7 @@ import { generateRefreshToken,
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            path: "/api/auth",   // was "/api/auth/refresh"
+            path: "/api/auth",
         })
 
         return res.code(200).send({ accessToken: newAccessToken });
