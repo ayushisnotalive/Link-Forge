@@ -13,7 +13,7 @@ export const logoutModule = async(req:FastifyRequest, res:FastifyReply)=>{
                 data: {revoked:true}
             })
         }
-        res.clearCookie("refreshToken", { path: "/api/auth" })
+        res.clearCookie("refreshToken", {path:"/api/auth/refresh"})
          return res.code(200).send({ success: true, message: "Logged out" });
 
     } catch (e) {

@@ -74,12 +74,12 @@ import { generateRefreshToken,
 
         await storeRefreshToken(user.id, newRefreshToken)
 
-        res.setCookie('refreshToken', newRefreshToken, {
+        res.setCookie('refreshToken', newRefreshToken,{
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            path: "/api/auth",
-        })
+            path: "/api/auth/refresh",
+                })
 
         return res.code(200).send({ accessToken: newAccessToken });
   } catch (e) {
