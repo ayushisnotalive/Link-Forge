@@ -77,7 +77,7 @@ import { generateRefreshToken,
         res.setCookie('refreshToken', newRefreshToken,{
             httpOnly: true,
             secure: true,
-            sameSite: "strict",
+            sameSite: "none",
             path: "/api/auth/refresh",
                 })
 

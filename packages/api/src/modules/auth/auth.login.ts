@@ -45,7 +45,7 @@ export const loginModule =async(req:FastifyRequest, res:FastifyReply)=>{
         res.setCookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: "strict",
+            sameSite: "none",
             path: "/api/auth/refresh",
             });
 
