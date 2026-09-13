@@ -1,0 +1,7 @@
+https://link-forge-production.up.railway.app
+
+-> just replace this with base your in postman and change - user A  & user B emails in signup test
+
+rest else give this above text in any LLM with development phase final testing json they will tell you
+and if you still can't understand what exactly I am talking about then you should
+either fuck around & find-out yourself else get some sleep and move on to something else
