@@ -46,9 +46,8 @@ export const loginModule =async(req:FastifyRequest, res:FastifyReply)=>{
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            path: "/api/auth/refresh",
-            });
-
+            path: "/api/auth",   // was "/api/auth/refresh"
+        });
 
 
         return res.code(200).send({
