@@ -4,7 +4,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
-
+import { Analytics } from "./pages/Analytics";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +24,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/dashboard/analytics/:code" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>
         </BrowserRouter>

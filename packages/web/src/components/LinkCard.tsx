@@ -1,5 +1,7 @@
 import type { ShortLink } from "../api/links";
 import { useToggleLink, useDeleteLink } from "../hooks/useLinks";
+import { Link } from "react-router-dom";
+import { BarChart2 } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -48,6 +50,13 @@ export default function LinkCard({ link }: { link: ShortLink }) {
         >
           delete
         </button>
+        <Link
+          to={`/dashboard/analytics/${link.shortCode}`}
+          className="text-indigo-600/80 hover:text-indigo-600 flex items-center gap-1 dark:text-indigo-400/80 dark:hover:text-indigo-400"
+          title="View Analytics"
+        >
+          <BarChart2 className="h-4 w-4" /> stats
+        </Link>
       </div>
     </div>
   );
