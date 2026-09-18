@@ -1,6 +1,6 @@
 import { getAccessToken } from "../context/tokenStore";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 export async function refreshAccessToken(): Promise<string | null> {
   const res = await fetch(`${API_URL}/api/auth/refresh`, {

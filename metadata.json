@@ -1,0 +1,6 @@
+{
+  "name": "Link-Forge",
+  "description": "Modern URL shortener with link management, click tracking, and performance analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

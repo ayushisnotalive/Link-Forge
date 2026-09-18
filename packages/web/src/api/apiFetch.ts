@@ -1,13 +1,14 @@
 import { getAccessToken, setAccessToken } from "../context/tokenStore";
 import { refreshAccessToken } from "./auth";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 export async function apiFetch(path: string, options: RequestInit = {}): Promise<Response> {
   const token = getAccessToken();
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
 
   const doFetch = (bearer: string | null) =>
-    fetch(`${API_URL}${path}`, {
+    fetch(`${API_URL}${cleanPath}`, {
       ...options,
       headers: {
         ...(options.body ? { "Content-Type": "application/json" } : {}),

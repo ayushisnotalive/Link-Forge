@@ -1,25 +1,139 @@
 @import "tailwindcss";
+@config "../tailwind.config.ts";
+
+:root {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 0%;
+  --card-foreground: 0 0% 100%;
+  --popover: 0 0% 0%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 24 95% 53%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 4% 16%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 240 4% 16%;
+  --muted-foreground: 240 5% 65%;
+  --accent: 24 95% 53%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 240 4% 16%;
+  --input: 240 4% 16%;
+  --ring: 24 95% 53%;
+  --radius: 0.5rem;
+}
 
 @theme {
-  --color-paper: #F5F6F4;
-  --color-ink: #1B1F23;
-  --color-accent: #2F5D50;
-  --color-accent-soft: #E8EFEC;
-  --color-rust: #B3441E;
-  --color-line: #DADFDA;
-  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --color-paper: #000000;
+  --color-background: #000000;
+  --color-ink: #FFFFFF;
+  --color-ink-muted: #A1A1AA;
+  --color-accent: #F97316;
+  --color-accent-hover: #EA580C;
+  --color-accent-dark: #C2410C;
+  --color-accent-soft: rgba(249, 115, 22, 0.12);
+  --color-rust: #EF4444;
+  --color-line: #27272A;
+  --color-muted: #A1A1AA;
+  --font-sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+html {
+  background-color: #000000;
+  color: #FFFFFF;
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
-  background-color: var(--color-paper);
-  color: var(--color-ink);
+  padding: 0;
+  background-color: #000000;
+  color: #FFFFFF;
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  min-height: 100vh;
 }
 
+::selection {
+  background-color: #F97316;
+  color: #FFFFFF;
+}
+
+/* Production-grade soft smooth slow pop on buttons and interactive elements */
+button,
+a.interactive-button,
+.btn-pop {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.2s ease,
+              opacity 0.2s ease;
+  will-change: transform;
+}
+
+button:hover:not(:disabled),
+a.interactive-button:hover,
+.btn-pop:hover:not(:disabled) {
+  transform: translateY(-1.5px) scale(1.02);
+}
+
+button:active:not(:disabled),
+a.interactive-button:active,
+.btn-pop:active:not(:disabled) {
+  transform: translateY(0.5px) scale(0.97);
+  transition-duration: 0.12s;
+}
+
+/* Smooth input transitions */
+input,
+textarea,
+select {
+  transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.2s ease;
+}
+
+/* Scrollbar styling for pure black aesthetic */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272A;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #F97316;
+}
+
+/* Smooth keyframes */
 @keyframes rowIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

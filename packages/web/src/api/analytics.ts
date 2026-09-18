@@ -1,14 +1,16 @@
 import { getAccessToken, setAccessToken } from "../context/tokenStore";
 import { refreshAccessToken } from "./auth";
 
-// 1. Ensure the URL starts with https:// if protocol is missing
-const rawUrl = import.meta.env.VITE_ANALYTICS_API_URL || "http://localhost:8080";
-const formattedUrl = rawUrl.startsWith("http://") || rawUrl.startsWith("https://")
-  ? rawUrl
-  : `https://${rawUrl}`;
+// 1. Ensure the URL starts with https:// if protocol is missing (default to local origin if unset)
+const rawUrl = import.meta.env.VITE_ANALYTICS_API_URL || "";
+const formattedUrl = rawUrl
+  ? (rawUrl.startsWith("http://") || rawUrl.startsWith("https://")
+      ? rawUrl
+      : `https://${rawUrl}`)
+  : "";
 
 // 2. Strip any accidental trailing slashes
-const ANALYTICS_API_URL = formattedUrl.replace(/\/+$/, "");
+const ANALYTICS_API_URL = formattedUrl ? formattedUrl.replace(/\/+$/, "") : "";
 
 export async function analyticsFetch(path: string, options: RequestInit = {}): Promise<Response> {
   const token = getAccessToken();
