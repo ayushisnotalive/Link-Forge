@@ -15,47 +15,57 @@ export default function LinkCard({ link }: { link: ShortLink }) {
     : null;
 
   return (
-    <div
-      className="flex items-center justify-between gap-4 py-4"
-      style={{ animation: "rowIn 0.25s ease-out" }}
-    >
-      <div className="min-w-0">
+    <div className="glass-panel glass-panel-hover animate-slide-up" style={{ padding: '20px', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+      <div style={{ minWidth: 0, flex: 1 }}>
         <a
-        
           href={shortUrl}
           target="_blank"
           rel="noreferrer"
-          className="block truncate font-mono text-sm text-accent hover:underline"
+          className="text-gradient"
+          style={{ display: 'block', fontSize: '1.125rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: '4px' }}
         >
           {link.shortCode}
         </a>
-        <p className="truncate text-sm text-ink/50">{link.longUrl}</p>
-        <div className="mt-1 flex items-center gap-2 text-xs text-ink/40">
-          <span className={link.isActive ? "text-accent" : "text-ink/40"}>
-            {link.isActive ? "active" : "disabled"}
+        <p className="text-muted text-sm" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: '8px' }}>
+          {link.longUrl}
+        </p>
+        <div className="flex items-center gap-4 text-sm">
+          <span style={{ 
+            color: link.isActive ? 'var(--accent-primary)' : 'var(--text-tertiary)',
+            display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 500
+          }}>
+            <span style={{ 
+              display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', 
+              backgroundColor: link.isActive ? 'var(--accent-primary)' : 'var(--text-tertiary)',
+              boxShadow: link.isActive ? '0 0 8px var(--accent-primary-glow)' : 'none'
+            }}></span>
+            {link.isActive ? "Active" : "Disabled"}
           </span>
-          {daysLeft !== null && <span>· expires in {daysLeft}d</span>}
+          {daysLeft !== null && <span className="text-tertiary">Expires in {daysLeft}d</span>}
         </div>
       </div>
-      <div className="flex shrink-0 items-center gap-4 text-sm">
+      <div className="flex items-center gap-2">
         <button
           onClick={() => toggleLink.mutate({ id: link.id, isActive: !link.isActive })}
-          className="text-ink/60 hover:text-ink"
+          className="btn btn-secondary"
+          style={{ padding: '8px 12px' }}
         >
-          {link.isActive ? "disable" : "enable"}
+          {link.isActive ? "Disable" : "Enable"}
         </button>
         <button
           onClick={() => deleteLink.mutate(link.id)}
-          className="text-rust/80 hover:text-rust"
+          className="btn btn-ghost text-danger"
+          style={{ padding: '8px 12px' }}
         >
-          delete
+          Delete
         </button>
         <Link
           to={`/dashboard/analytics/${link.shortCode}`}
-          className="text-indigo-600/80 hover:text-indigo-600 flex items-center gap-1 dark:text-indigo-400/80 dark:hover:text-indigo-400"
+          className="btn btn-ghost"
+          style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent-secondary)', padding: '8px 12px', textDecoration: 'none' }}
           title="View Analytics"
         >
-          <BarChart2 className="h-4 w-4" /> stats
+          <BarChart2 size={16} /> Stats
         </Link>
       </div>
     </div>

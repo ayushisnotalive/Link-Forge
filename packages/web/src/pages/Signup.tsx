@@ -28,18 +28,27 @@ export default function Signup() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-6">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm">
-        <h1 className="mb-6 text-lg font-semibold">Sign up</h1>
-        {error && <p className="mb-4 text-sm text-rust">{error}</p>}
-        <div className="space-y-4">
+    <div className="flex min-h-screen items-center justify-center animate-fade-in" style={{ padding: '0 24px' }}>
+      <form onSubmit={handleSubmit} className="glass-panel glass-panel-hover" style={{ width: '100%', maxWidth: '400px', padding: '40px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <h1 className="text-2xl font-semibold text-gradient mb-4">Create Account</h1>
+          <p className="text-sm text-muted">Join Link-Forge to start building</p>
+        </div>
+        
+        {error && (
+          <div className="text-danger text-sm text-center mb-6" style={{ background: 'rgba(239, 68, 68, 0.1)', padding: '10px', borderRadius: '8px' }}>
+            {error}
+          </div>
+        )}
+        
+        <div className="flex flex-col gap-4">
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full border-b border-line bg-transparent py-2 text-sm outline-none focus:border-ink"
+            className="input-field"
           />
           <input
             type="password"
@@ -47,18 +56,21 @@ export default function Signup() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full border-b border-line bg-transparent py-2 text-sm outline-none focus:border-ink"
+            className="input-field"
           />
         </div>
+        
         <button
           type="submit"
           disabled={isSubmitting}
-          className="mt-6 w-full bg-ink py-2 text-sm text-paper disabled:opacity-40"
+          className="btn btn-primary w-full mt-8"
+          style={{ padding: '14px' }}
         >
-          {isSubmitting ? "Creating account…" : "Sign up"}
+          {isSubmitting ? "Creating account..." : "Sign Up"}
         </button>
-        <p className="mt-4 text-sm text-ink/50">
-          Already have an account? <Link to="/login" className="text-accent">Log in</Link>
+        
+        <p className="text-center text-sm text-muted mt-6">
+          Already have an account? <Link to="/login" className="text-accent" style={{ textDecoration: 'none', fontWeight: 500 }}>Sign in</Link>
         </p>
       </form>
     </div>

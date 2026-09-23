@@ -16,26 +16,34 @@ export default function CreateLinkForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="flex items-center gap-3 border-b border-ink pb-3">
-        <span className="font-mono text-sm text-ink/40">forge&gt;</span>
+    <form onSubmit={handleSubmit} className="animate-slide-up" style={{ marginBottom: '40px' }}>
+      <div className="glass-panel" style={{ padding: '8px', display: 'flex', alignItems: 'center', gap: '12px' }}>
         <input
           type="url"
-          placeholder="paste a long url"
+          placeholder="Paste a long URL to forge..."
           value={longUrl}
           onChange={(e) => setLongUrl(e.target.value)}
           required
-          className="flex-1 bg-transparent font-mono text-sm outline-none placeholder:text-ink/30"
+          style={{ 
+            flex: 1, 
+            background: 'transparent', 
+            border: 'none', 
+            outline: 'none', 
+            color: 'var(--text-primary)',
+            padding: '12px',
+            fontSize: '1rem',
+            fontFamily: 'inherit'
+          }}
         />
         <button
           type="submit"
           disabled={isPending}
-          className="text-sm font-medium text-accent hover:text-ink disabled:opacity-40"
+          className="btn btn-primary"
         >
-          {isPending ? "forging…" : "shorten"}
+          {isPending ? "Forging..." : "Shorten"}
         </button>
       </div>
-      {error && <p className="mt-2 text-sm text-rust">{error}</p>}
+      {error && <p className="text-danger text-sm mt-2" style={{ paddingLeft: '12px' }}>{error}</p>}
     </form>
   );
 }
