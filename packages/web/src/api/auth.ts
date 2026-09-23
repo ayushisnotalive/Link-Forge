@@ -2,14 +2,28 @@ import { getAccessToken } from "../context/tokenStore";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+let refreshPromise: Promise<string | null> | null = null;
+
 export async function refreshAccessToken(): Promise<string | null> {
-  const res = await fetch(`${API_URL}/api/auth/refresh`, {
-    method: "POST",
-    credentials: "include",
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.accessToken as string;
+  if (refreshPromise) {
+    return refreshPromise;
+  }
+  refreshPromise = (async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/auth/refresh`, {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data.accessToken as string;
+    } catch (error) {
+      return null;
+    } finally {
+      refreshPromise = null;
+    }
+  })();
+  return refreshPromise;
 }
 
 export async function signup(email: string, password: string) {
