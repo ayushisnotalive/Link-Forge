@@ -40,7 +40,7 @@ func (r *postgresAnalyticsRepository) BatchInsertClickEvents(ctx context.Context
 
 	i := 1
 	for _, event := range events {
-		valueStrings = append(valueStrings, fmt.Sprintf("($%d, $%d, $%d, $%d, $%d, $%d, $%d)",
+		valueStrings = append(valueStrings, fmt.Sprintf("($%d::uuid, $%d, $%d, $%d, $%d, $%d, $%d)",
 			i, i+1, i+2, i+3, i+4, i+5, i+6))
 
 		valueArgs = append(valueArgs, event.ShortLinkID)
@@ -87,7 +87,7 @@ func (r *postgresAnalyticsRepository) BatchInsertClickEvents(ctx context.Context
 		for date, count := range counts {
 			_, err = tx.Exec(ctx, `
 				INSERT INTO click_aggregates_daily (short_link_id, date, total_clicks)
-				VALUES ($1, $2, $3)
+				VALUES ($1::uuid, $2, $3)
 				ON CONFLICT (short_link_id, date) DO UPDATE
 				SET total_clicks = click_aggregates_daily.total_clicks + EXCLUDED.total_clicks
 			`, linkID, date, count)
@@ -107,7 +107,7 @@ func (r *postgresAnalyticsRepository) BatchInsertClickEvents(ctx context.Context
 
 func (r *postgresAnalyticsRepository) GetTotalClicks(ctx context.Context, shortLinkID string) (int, error) {
 	var total int
-	err := r.db.QueryRow(ctx, "SELECT COALESCE(SUM(total_clicks), 0) FROM click_aggregates_daily WHERE short_link_id = $1", shortLinkID).Scan(&total)
+	err := r.db.QueryRow(ctx, "SELECT COALESCE(SUM(total_clicks), 0) FROM click_aggregates_daily WHERE short_link_id = $1::uuid", shortLinkID).Scan(&total)
 	if err != nil {
 		return 0, err
 	}
@@ -118,7 +118,7 @@ func (r *postgresAnalyticsRepository) GetTimeSeriesData(ctx context.Context, sho
 	rows, err := r.db.Query(ctx, `
 		SELECT TO_CHAR(date, 'YYYY-MM-DD'), total_clicks
 		FROM click_aggregates_daily
-		WHERE short_link_id = $1
+		WHERE short_link_id = $1::uuid
 		ORDER BY date ASC`, shortLinkID)
 	if err != nil {
 		return nil, err
@@ -140,7 +140,7 @@ func (r *postgresAnalyticsRepository) GetTopReferrers(ctx context.Context, short
 	rows, err := r.db.Query(ctx, `
 		SELECT COALESCE(referrer, 'Direct'), COUNT(*) as count
 		FROM click_events
-		WHERE short_link_id = $1
+		WHERE short_link_id = $1::uuid
 		GROUP BY COALESCE(referrer, 'Direct')
 		ORDER BY count DESC
 		LIMIT 10`, shortLinkID)
@@ -164,7 +164,7 @@ func (r *postgresAnalyticsRepository) GetDeviceBreakdown(ctx context.Context, sh
 	rows, err := r.db.Query(ctx, `
 		SELECT COALESCE(device_type, 'Unknown'), COUNT(*) as count
 		FROM click_events
-		WHERE short_link_id = $1
+		WHERE short_link_id = $1::uuid
 		GROUP BY COALESCE(device_type, 'Unknown')
 		ORDER BY count DESC`, shortLinkID)
 	if err != nil {
@@ -185,7 +185,7 @@ func (r *postgresAnalyticsRepository) GetDeviceBreakdown(ctx context.Context, sh
 
 func (r *postgresAnalyticsRepository) VerifyLinkOwner(ctx context.Context, shortLinkID, userID string) (bool, error) {
 	var count int
-	err := r.db.QueryRow(ctx, "SELECT COUNT(*) FROM short_links WHERE id = $1 AND user_id = $2", shortLinkID, userID).Scan(&count)
+	err := r.db.QueryRow(ctx, "SELECT COUNT(*) FROM short_links WHERE id = $1::uuid AND user_id = $2::uuid", shortLinkID, userID).Scan(&count)
 	if err != nil {
 		log.Printf("VerifyLinkOwner error: %v\n", err)
 		return false, err
